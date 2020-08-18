@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	http.Handle("/", http.FileServer(http.Dir("./starting-files")))
+	http.Handle("/", http.FileServer(http.Dir(".")))
 	http.HandleFunc("/penguin", penguin)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
