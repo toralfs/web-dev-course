@@ -7,6 +7,7 @@ import (
 
 func main() {
 	http.Handle("/", http.FileServer(http.Dir(".")))
+	http.Handle("/favicon.ico", http.NotFoundHandler())
 	http.HandleFunc("/penguin", penguin)
 	http.ListenAndServe(":8080", nil)
 }
