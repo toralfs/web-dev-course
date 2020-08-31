@@ -5,12 +5,14 @@ import (
 	"log"
 	"net/http"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/google/uuid"
 )
 
 type user struct {
 	UserName string
-	Password string
+	Password []byte
 	First    string
 	Last     string
 }
@@ -74,7 +76,12 @@ func signup(w http.ResponseWriter, req *http.Request) {
 		dbSessions[c.Value] = un
 
 		// store user
-		u := user{un, p, f, l}
+		bs, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.MinCost)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		u := user{un, bs, f, l}
 		dbUsers[un] = u
 
 		// redirect
